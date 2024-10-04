@@ -5,6 +5,7 @@ const crypto = require('crypto'); // node.js 기본 내장 모듈
 const dotenv = require('dotenv');
 dotenv.config();
 
+
 const join = (req, res) => {
     const {email, password} = req.body;
 
