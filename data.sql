@@ -33,3 +33,46 @@ VALUES ("혹부리 영감", 22, 2, "ebook", 10, "노래 주머니..", "혹 두�
 
 SELECT * FROM books LEFT
 JOIN category ON books.category_id = category.id;
+
+SELECT * FROM LEFT JOIN category ON books.category_id = category.id WHERE books.id = 1;
+
+INSERT INTO likes (user_id, liked_book_id) VALUES (1, 1);
+INSERT INTO likes (user_id, liked_book_id) VALUES (1, 2);
+INSERT INTO likes (user_id, liked_book_id) VALUES (1, 3);
+INSERT INTO likes (user_id, liked_book_id) VALUES (6, 1);
+INSERT INTO likes (user_id, liked_book_id) VALUES (6, 4);
+INSERT INTO likes (user_id, liked_book_id) VALUES (2, 1);
+INSERT INTO likes (user_id, liked_book_id) VALUES (2, 2);
+INSERT INTO likes (user_id, liked_book_id) VALUES (2, 3);
+INSERT INTO likes (user_id, liked_book_id) VALUES (2, 5);
+
+
+DELETE FROM likes
+WHERE user_id = 1 AND liked_book_id = 3;
+
+SELECT count(*) FROM likes WHERE liked_book_id = 2;
+
+SELECT *, 
+(SELECT count(*) FROM likes WHERE liked_book_id=books.id) AS likes
+FROM books;
+
+SELECT EXISTS (SELECT * FROM likes WHERE user_id=1 AND liked_book_id=1);
+
+SELECT count(*) FROM likes WHERE user_id=1 AND liked_book_id=1;
+
+SELECT *,
+(SELECT EXISTS (SELECT * FROM likes WHERE user_id=1 AND liked_book_id=1)) AS liked_book_id
+FROM books WHERE books.id=1;
+
+SELECT *,
+(SELECT count(*) FROM likes WHERE liked_book_id=books.id) AS likes,
+(SELECT EXISTS (SELECT * FROM likes WHERE user_id=1 AND liked_book_id=8)) AS liked_book_id
+FROM books WHERE books.id=8;
+
+SELECT *,
+(SELECT count(*) FROM likes WHERE liked_book_id=books.id) AS likes,
+(SELECT EXISTS (SELECT * FROM likes WHERE user_id=1 AND liked_book_id=1)) AS liked
+FROM books 
+LEFT JOIN category 
+ON books.category_id = category.category_id
+WHERE books.id=1;
