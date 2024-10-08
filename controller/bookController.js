@@ -4,12 +4,20 @@ const {StatusCodes} = require('http-status-codes');
 
 // 개별 도서 조회
 const bookDetail = (req, res) => {
-    const {id} = req.params;
-    console.log(id);
-    let sql = `SELECT * FROM books LEFT JOIN category 
+    const {user_id} = req.body;
+    const book_id = req.params.id;
+
+    let sql = `SELECT *,
+                    (SELECT count(*) FROM likes WHERE liked_book_id=books.id) AS likes,
+                    (SELECT EXISTS (SELECT * FROM likes WHERE user_id=? AND liked_book_id=?)) AS liked
+                FROM books 
+                LEFT JOIN category 
                 ON books.category_id = category.category_id
-                WHERE books.id = ?`;
-    conn.query(sql, id,
+                WHERE books.id=?;`;
+
+    let values = [user_id, book_id, book_id];
+
+    conn.query(sql, values,
         (err, results) => {
             if (err) {
                 console.log(err);
@@ -31,7 +39,7 @@ const allBooks = (req, res) => {
 
     let offset = limit * (currentPage-1);
     
-    let sql = `SELECT * FROM books`;
+    let sql = `SELECT *, (SELECT count(*) FROM likes WHERE liked_book_id=books.id) AS likes FROM books`;
     let values = [];
 
     if (category_id && news) {
