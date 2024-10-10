@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {
     allCategory
-} = require('../controller/categoryController');
+} = require('../controller/CategoryController');
 
 router.use(express.json());
 
