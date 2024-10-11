@@ -92,3 +92,25 @@ DELETE FROM cartItems WHERE id = 1;
 
 // 장바구니에서 선택한(장바구니 도서 id) 아이템 목록 조회
 SELECT * FROM cartItems WHERE user_id=1 AND id IN (1,3);
+
+// 주문하기
+// 배송 정보 입력
+INSERT INTO delivery (address, receiver, contact) VALUES ("서울시 중구", "김소아", "010-1234-5678")
+INSERT INTO delivery (address, receiver, contact) VALUES ("서울시 서초구", "김송송", "010-1111-2222")
+const delivery_id = SELECT max(id) FROM delivery
+
+// 주문 정보 입력
+INSERT INTO orders (address, receiver, contact) 
+VALUES ("서울시 서초구", "김송송", delivery_id)
+const order_id = SELECT max(id) FROM orders;
+
+// 주문 상세 목록 입력
+INSERT INTO orderedBook (order_id, book_id, quantity) 
+VALUES (1, 1, 1)
+INSERT INTO orderedBook (order_id, book_id, quantity) 
+VALUES (order_id, 3, 2)
+
+SELECT max(id) FROM orderedBook;
+
+SELECT last_insert_id(); // 비슷한 시간대에 쿼리가 발생하면 문제
+
