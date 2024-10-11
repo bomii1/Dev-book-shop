@@ -45,7 +45,7 @@ const login = (req, res) => {
             const hashPassword = crypto.pbkdf2Sync(password, loginUser.salt, 10000, 10, 'sha512').toString('base64');
             
             // DB에 암호화되어 있는 비밀번호와 비교
-            if (login && loginUser.password === hashPassword) {
+            if (loginUser && loginUser.password === hashPassword) {
                 // 토큰 발행
                 const token = jwt.sign({
                     email: loginUser.email,
