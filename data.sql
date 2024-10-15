@@ -114,3 +114,15 @@ SELECT max(id) FROM orderedBook;
 
 SELECT last_insert_id(); // 비슷한 시간대에 쿼리가 발생하면 문제
 
+// 결제된 도서 장바구니 삭제
+DELETE FROM cartItems WHERE id IN (1, 2, 3);
+
+// 주문 목록 조회
+SELECT orders.id, book_title, total_quantity, total_price, created_at, address, receiver, contact
+FROM orders LEFT JOIN delivery
+ON orders.delivery_id = delivery.id;
+
+// 주문 도서 상세 조회
+SELECT book_id, title, author, price, quantity
+FROM orderedBook LEFT JOIN books
+ON orderedBook.book_id = books.id WHERE order_id = 1;

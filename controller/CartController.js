@@ -27,9 +27,14 @@ const getCartItems = (req, res) => {
     let sql = `SELECT cartItems.id, book_id, title, summary, quantity, price 
                 FROM cartItems LEFT JOIN books 
                 ON cartItems.book_id = books.id 
-                WHERE user_id = ?
-                AND cartItems.id IN (?)`;
-    let values = [user_id, selected];
+                WHERE user_id = ?`;
+
+    if (selected) {
+        sql += 'AND cartItems.id IN (?)';
+        values.push(selected);
+    }
+
+    let values = [user_id];
     conn.query(sql, values,
         (err, results) => {
             if (err) {
