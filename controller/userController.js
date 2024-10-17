@@ -11,6 +11,7 @@ const join = (req, res) => {
 
     // 회원가입 시 비밀번호를 암호화해서 암호화된 비밀번호와 salt 값을 같이 DB에 저장
     const salt = crypto.randomBytes(10).toString('base64');
+    // console.log(salt);
     const hashPassword = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
 
     let sql = `INSERT INTO users (email, password, salt) VALUES (?, ?, ?)`;
@@ -48,6 +49,7 @@ const login = (req, res) => {
             if (loginUser && loginUser.password === hashPassword) {
                 // 토큰 발행
                 const token = jwt.sign({
+                    id: loginUser.id,
                     email: loginUser.email,
                     password: loginUser.password,
                 }, process.env.PRIVATE_KEY, {
@@ -55,7 +57,7 @@ const login = (req, res) => {
                     issuer: 'bomi'
                 });
 
-                res.cookie("token", token, {
+                res.cookie("jwt", token, {
                     httpOnly: true
                 }); // 토큰 쿠키에 담음
                 console.log(token);
